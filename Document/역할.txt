@@ -1,0 +1,6 @@
+1. data type(vec5 / mat5) 구현 - 박성빈
+2. Shader(4차원 vertex를 3차원으로 projection) programming - 백성빈
+3. modified .obj file loader - 백성빈
+4. Math 문서화 - 박성빈
+5. Shader(3차원 vertex에 특수효과 적용) - 윤지우
+6. 4차원 Object의 .obj 파일 생성 - 박성빈
