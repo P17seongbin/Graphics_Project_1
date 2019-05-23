@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class SampleCube : MonoBehaviour
 {
     MeshFilter objMesh;
-    
+
     Vector3[] vertices = new Vector3[8];
     public float size = 1;
     int k = 0;
