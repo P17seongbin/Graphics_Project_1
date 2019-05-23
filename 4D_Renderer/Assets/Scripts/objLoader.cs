@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +14,7 @@ public class ObjLoader
     List<Vector4> rawVertices;
     List<Vector4> rawNormals;
 
+    //실제로 Unity 상에 넘겨줘야 할 vertex,normal,tris 데이터입니다. 
     public List<Vector4> vertices { get; private set; }
     public List<Vector4> normals { get; private set; }
     public List<int> tris { get; private set; }
