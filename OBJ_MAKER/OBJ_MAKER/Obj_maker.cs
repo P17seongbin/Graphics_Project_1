@@ -12,6 +12,7 @@ namespace OBJ_MAKER
         public List<Tuple<float, float, float, float>> v;
         public List<Tuple<float, float, float, float>> n;
         public List<Tuple<int, int, int, int, int, int>> f;
+        public List<Tuple<int, int>> l;
     }
     class HyperCube : Object4D
     {
@@ -20,6 +21,55 @@ namespace OBJ_MAKER
             v = new List<Tuple<float, float, float, float>>();
             n = new List<Tuple<float, float, float, float>>();
             f = new List<Tuple<int, int, int, int, int, int>>();
+            l = new List<Tuple<int, int>>();
+
+            l.Add(new Tuple<int, int>(0, 1));
+            l.Add(new Tuple<int, int>(0, 2));
+            l.Add(new Tuple<int, int>(0, 4));
+            l.Add(new Tuple<int, int>(0, 8));
+
+            l.Add(new Tuple<int, int>(1, 3));
+            l.Add(new Tuple<int, int>(1, 5));
+            l.Add(new Tuple<int, int>(1, 9));
+
+            l.Add(new Tuple<int, int>(2, 3));
+            l.Add(new Tuple<int, int>(2, 6));
+            l.Add(new Tuple<int, int>(2, 6));
+
+            l.Add(new Tuple<int, int>(3, 7));
+            l.Add(new Tuple<int, int>(3, 10));
+
+            l.Add(new Tuple<int, int>(4, 5));
+            l.Add(new Tuple<int, int>(4, 6));
+            l.Add(new Tuple<int, int>(4, 12));
+
+            l.Add(new Tuple<int, int>(5, 7));
+            l.Add(new Tuple<int, int>(5, 13));
+
+            l.Add(new Tuple<int, int>(6, 7));
+            l.Add(new Tuple<int, int>(6, 14));
+
+            l.Add(new Tuple<int, int>(7, 15));
+
+            l.Add(new Tuple<int, int>(8, 9));
+            l.Add(new Tuple<int, int>(8, 10));
+            l.Add(new Tuple<int, int>(8, 12));
+
+            l.Add(new Tuple<int, int>(9, 11));
+            l.Add(new Tuple<int, int>(9, 13));
+
+            l.Add(new Tuple<int, int>(10, 11));
+            l.Add(new Tuple<int, int>(10, 14));
+
+            l.Add(new Tuple<int, int>(11, 15));
+
+            l.Add(new Tuple<int, int>(12, 13));
+            l.Add(new Tuple<int, int>(12, 14));
+
+            l.Add(new Tuple<int, int>(13, 15));
+
+            l.Add(new Tuple<int, int>(14, 15));
+
 
             v.Add(new Tuple<float, float, float, float>(0, 0, 0, 0));//0
             v.Add(new Tuple<float, float, float, float>(1, 0, 0, 0));//1
@@ -53,7 +103,6 @@ namespace OBJ_MAKER
                 f.Add(new Tuple<int, int, int, int, int, int>(0, 6, 4, 6, 5, 6));
                 f.Add(new Tuple<int, int, int, int, int, int>(0, 6, 5, 6, 7, 6));
                 f.Add(new Tuple<int, int, int, int, int, int>(4, 6, 5, 6, 7, 6));
-
                 f.Add(new Tuple<int, int, int, int, int, int>(0, 6, 4, 6, 7, 6));
                 f.Add(new Tuple<int, int, int, int, int, int>(0, 6, 4, 6, 6, 6));
                 f.Add(new Tuple<int, int, int, int, int, int>(0, 6, 6, 6, 7, 6));
@@ -338,7 +387,13 @@ namespace OBJ_MAKER
                 {
                     outputFile.WriteLine("f " + fline.Item1 + "/" + fline.Item2 + " " + fline.Item3 + "/" + fline.Item4 + " " + fline.Item5 + "/" + fline.Item6);
                 }
-                outputFile.WriteLine("# " + hyperCube.f.Count + " faces");
+                outputFile.WriteLine("# " + hyperCube.f.Count + " faces" + '\n');
+
+                foreach (Tuple<int, int> fline in hyperCube.l)
+                {
+                    outputFile.WriteLine("l " + fline.Item1 + "/" + fline.Item2);
+                }
+                outputFile.WriteLine("# " + hyperCube.l.Count + " lines");
             }
         }
     }
