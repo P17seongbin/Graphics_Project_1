@@ -72,7 +72,12 @@ public class SampleCube : MonoBehaviour
 
         //지정한 face-vector 연동값을 mesh에 등록합니다.
         objMesh.mesh.triangles = tri;
-        
+
+        ObjLoader l = new ObjLoader("Hypercube", "Hypercube");
+        l.LoadData();
+        Debug.Log(l.vertices);
+        Debug.Log(l.normals);
+        Debug.Log(l.tris);
     }
 
 

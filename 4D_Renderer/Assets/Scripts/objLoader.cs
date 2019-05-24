@@ -24,6 +24,14 @@ public class ObjLoader
     //생성자.
     public ObjLoader(string objFilePath, string Name)
     {
+        vertices = new List<Vector4>();
+        normals = new List<Vector4>();
+        tris = new List<int>();
+
+        rawNormals = new List<Vector4>();
+        rawVertices = new List<Vector4>();
+
+
         Path = objFilePath;
         objName = Name;
     }
@@ -34,41 +42,44 @@ public class ObjLoader
         //Line by Line Parser
         var splitFile = new string[] { "\r\n", "\r", "\n" };
         var spaceParcer = new char[] { ' ' };
-        UnityEngine.Object t = Resources.Load(Path);
-        if (t != null) //Load가 성공적으로 이루어 졌나요?
+        //TODO: 예외처리를 해야 합니다
+        TextAsset objrawText = (TextAsset)Resources.Load(Path);
+        if (objrawText != null) //Load가 성공적으로 이루어 졌나요?
         {
-            //TODO: 예외처리를 해야 합니다
-            TextAsset objrawText = (TextAsset)t;
+
+
             var objData = objrawText.text.Split(splitFile, StringSplitOptions.None);
 
             int l = objData.Length;
             for (int i = 0; i < l; i++)
             {
                 //귀찮으니까 일단 If-else로 구현, 나중에 리팩토링 할 가능성이 크다.
-
-                if (objData[i].Substring(0, 2) == "vn")//vertex normal data
+                if (objData[i].Length> 2)
                 {
-                    var d = objData[i].Split(spaceParcer);
-                    Vector4 tV = new Vector4(float.Parse(d[1]), float.Parse(d[2]), float.Parse(d[3]), float.Parse(d[4]));
-                    rawNormals.Add(tV);
-                }
-                else if (objData[i].Substring(0, 1) == "v")//vertex data
-                {
-                    var d = objData[i].Split(spaceParcer);
-                    Vector4 tV = new Vector4(float.Parse(d[1]), float.Parse(d[2]), float.Parse(d[3]), float.Parse(d[4]));
-                    rawVertices.Add(tV);
-                }
-                else if (objData[i].Substring(0, 1) == "f")//face data
-                {
-                    var d = objData[i].Split(spaceParcer);
-                    for (int j = 1; j < d.Length; j++)
+                    if (objData[i].Substring(0, 2) == "vn")//vertex normal data
                     {
-                        var d2 = d[j].Split(new char[] { '/' });
-                        vertices.Add(rawVertices[int.Parse(d2[0])]);
-                        normals.Add(rawVertices[int.Parse(d2[1])]);
+                        var d = objData[i].Split(spaceParcer);
+                        Vector4 tV = new Vector4(float.Parse(d[1]), float.Parse(d[2]), float.Parse(d[3]), float.Parse(d[4]));
+                        rawNormals.Add(tV);
+                    }
+                    else if (objData[i].Substring(0, 1) == "v")//vertex data
+                    {
+                        var d = objData[i].Split(spaceParcer);
+                        Vector4 tV = new Vector4(float.Parse(d[1]), float.Parse(d[2]), float.Parse(d[3]), float.Parse(d[4]));
+                        rawVertices.Add(tV);
+                    }
+                    else if (objData[i].Substring(0, 1) == "f")//face data
+                    {
+                        var d = objData[i].Split(spaceParcer);
+                        for (int j = 1; j < d.Length; j++)
+                        {
+                            var d2 = d[j].Split(new char[] { '/' });
+                            vertices.Add(rawVertices[int.Parse(d2[0])]);
+                            normals.Add(rawVertices[int.Parse(d2[1])]);
 
-                        tris.Add(vc);
-                        vc++;
+                            tris.Add(vc);
+                            vc++;
+                        }
                     }
                 }
             }
