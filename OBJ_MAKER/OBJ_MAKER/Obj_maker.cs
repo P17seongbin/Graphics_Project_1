@@ -354,6 +354,66 @@ namespace OBJ_MAKER
             }
         }
     }
+
+    class ParametrizedObject : Object4D
+    {
+        private float theta_min, theta_max, phi_min, phi_max;
+        private float r;
+        private int N;
+        public ParametrizedObject(float _r, float _theta_min, float _theta_max, float _phi_min, float _phi_max)
+        {
+            N = 100;
+            r = _r;
+            theta_min = _theta_min;
+            theta_max = _theta_max;
+            phi_min = _phi_min;
+            phi_max = _phi_max;
+            v = new List<Tuple<float, float, float, float>>();
+            n = new List<Tuple<float, float, float, float>>();
+            f = new List<Tuple<int, int, int, int, int, int>>();
+            l = new List<Tuple<int, int>>();
+            draw();
+        }
+        private void draw()
+        {
+            for (int i = 0; i < N; i++)
+            {
+                for (int j = 0; j < N; j++)
+                {
+                    v.Add(new Tuple<float, float, float, float>(r * (float)Math.Cos(theta_min + (theta_max - theta_min) * i / 100), r * (float)Math.Sin(theta_min + (theta_max - theta_min) * i / 100),
+                        r * (float)Math.Cos(phi_min + (phi_max - phi_min) * j / 100), r * (float)Math.Sin(phi_min + (phi_max - phi_min) * j / 100)));
+                    n.Add(new Tuple<float, float, float, float>(-r * (float)Math.Sin(theta_min + (theta_max - theta_min) * i / 100), r * (float)Math.Cos(theta_min + (theta_max - theta_min) * i / 100),
+                        -r * (float)Math.Sin(phi_min + (phi_max - phi_min) * j / 100), r * (float)Math.Cos(phi_min + (phi_max - phi_min) * j / 100)));
+                }
+            }
+            for (int i = 0; i < N; i++)
+            {
+                for (int j = 0; j < N; j++)
+                {
+                    l.Add(new Tuple<int, int>(N * i + j, N * i + ((j + 1) % N)));
+                }
+            }
+            for (int i = 0; i < N; i++)
+            {
+                for (int j = 0; j < N; j++)
+                {
+                    l.Add(new Tuple<int, int>(N * i + j, N * ((i + 1) % N) + j));
+                }
+            }
+            for (int i = 0; i < N; i++)
+            {
+                for (int j = 0; j < N; j++)
+                {
+                    f.Add(new Tuple<int, int, int, int, int, int>(N * i + j, N * i + j,
+                        N * i + ((j + 1) % N), N * i + ((j + 1) % N),
+                        N * ((i + 1) % N) + j, N * ((i + 1) % N) + j));
+                    f.Add(new Tuple<int, int, int, int, int, int>(N * ((i + 1) % N) + ((j + 1) % N), N * ((i + 1) % N) + ((j + 1) % N),
+                        N * i + ((j + 1) % N), N * i + ((j + 1) % N),
+                        N * ((i + 1) % N) + j, N * ((i + 1) % N) + j));
+                }
+            }
+        }
+    }
     class Obj_maker
     {
         static void Main()
@@ -362,6 +422,7 @@ namespace OBJ_MAKER
             Console.WriteLine(docPath);
 
             Write();
+            WriteCliffordTorus();
         }
         static void Write()
         {
@@ -369,7 +430,7 @@ namespace OBJ_MAKER
 
             HyperCube hyperCube = new HyperCube();
 
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "WriteLines.txt")))
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "HyperCube.obj")))
             {
                 foreach (Tuple<float, float, float, float> vline in hyperCube.v)
                 {
@@ -394,6 +455,40 @@ namespace OBJ_MAKER
                     outputFile.WriteLine("l " + fline.Item1 + "/" + fline.Item2);
                 }
                 outputFile.WriteLine("# " + hyperCube.l.Count + " lines");
+            }
+        }
+
+        static void WriteCliffordTorus()
+        {
+            string docPath = System.IO.Directory.GetCurrentDirectory();
+
+            ParametrizedObject CliffordTorus = new ParametrizedObject((1 / (float)Math.Sqrt(2)), 0, 2 * (float)Math.PI, 0, 2 * (float)Math.PI);
+
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "CliffordTorus.obj")))
+            {
+                foreach (Tuple<float, float, float, float> vline in CliffordTorus.v)
+                {
+                    outputFile.WriteLine("v " + vline.Item1 + " " + vline.Item2 + " " + vline.Item3 + " " + vline.Item4);
+                }
+                outputFile.WriteLine("# " + CliffordTorus.v.Count + " vertices" + '\n');
+
+                foreach (Tuple<float, float, float, float> nline in CliffordTorus.n)
+                {
+                    outputFile.WriteLine("vn " + nline.Item1 + " " + nline.Item2 + " " + nline.Item3 + " " + nline.Item4);
+                }
+                outputFile.WriteLine("# " + CliffordTorus.n.Count + " vertex normals" + '\n');
+
+                foreach (Tuple<int, int, int, int, int, int> fline in CliffordTorus.f)
+                {
+                    outputFile.WriteLine("f " + fline.Item1 + "/" + fline.Item2 + " " + fline.Item3 + "/" + fline.Item4 + " " + fline.Item5 + "/" + fline.Item6);
+                }
+                outputFile.WriteLine("# " + CliffordTorus.f.Count + " faces" + '\n');
+
+                foreach (Tuple<int, int> fline in CliffordTorus.l)
+                {
+                    outputFile.WriteLine("l " + fline.Item1 + "/" + fline.Item2);
+                }
+                outputFile.WriteLine("# " + CliffordTorus.l.Count + " lines");
             }
         }
     }
