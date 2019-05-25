@@ -43,9 +43,9 @@ public class SampleCube : MonoBehaviour
         for (int i = 0; i < c; i++)
         {
             //Orthogonal projection
-            //vertices[i] = new Vector3(rawvertex[i].x, rawvertex[i].y, rawvertex[i].z) + Vector3.one * rawvertex[i].w;
+            vertices[i] = new Vector3(rawvertex[i].x, rawvertex[i].y, rawvertex[i].z) + Vector3.one * rawvertex[i].w;
             //perspective projection
-            vertices[i] = new Vector3(rawvertex[i].x, rawvertex[i].y, rawvertex[i].z) * rawvertex[i].w;//* Mathf.Pow(1.2f,rawvertex[i].w);
+            //vertices[i] = new Vector3(rawvertex[i].x, rawvertex[i].y, rawvertex[i].z) * rawvertex[i].w;//* Mathf.Pow(1.2f,rawvertex[i].w);
         }
         objMesh.mesh.vertices = vertices;
         objMesh.mesh.normals = vertices;
