@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-
+using myglm;
 /// <summary>
 /// Resources 폴더 안에 있는 obj 파일로부터 단일 오브젝트의 데이터를 읽어서 저장하는 Class입니다.
 /// 외부 Object에서 원하는 데이터를 call할 수 있습니다.
@@ -19,8 +19,53 @@ public class ObjLoader
     public List<Vector4> normals { get; private set; }
     public List<int> tris { get; private set; }
 
-    int vc = 0;
 
+    //현재 Object를 투영하고 있는 Camera에 대한 정보입니다.
+    public Vec5 _4DcamPos { get; private set; }
+    public Vec5 _4DviewVec { get; private set; }
+    public Vec5 _4DupVec1 { get; private set; }
+    public Vec5 _4DupVec2 { get; private set; }
+
+
+    public Mat5 getViewMatrix()
+    {
+        Vec5 vec_l = Vec5.CorssProduct(_4DviewVec, _4DupVec1, _4DupVec2);
+
+        //create left side of view matrix
+        Mat5 t1 = new Mat5(0);//Zero matrix
+        for(int i=0;i<4;i++)
+        {
+            t1[0, i] = vec_l[i];
+        }
+        for (int i = 0; i < 4; i++)
+        {
+            t1[1, i] = _4DupVec1[i];
+        }
+        for (int i = 0; i < 4; i++)
+        {
+            t1[2, i] = _4DupVec2[i];
+        }
+        for (int i = 0; i < 4; i++)
+        {
+            t1[3, i] = _4DviewVec[i];
+        }
+        t1[4, 4] = 1;
+
+        //create right side of view matrix
+        Mat5 t2 = new Mat5(0);
+        for(int i=0;i<4;i++)
+        {
+            t1[i, i] = 1;
+            t1[i, 4] = -1 * _4DcamPos[i];
+        }
+        t1[4, 4] = 1;
+
+        //multiply t1 and t2 to get final view matrix
+        Mat5 res = t1 * t2;
+        return res;
+
+    }
+    int vc = 0;          
     //생성자.
     public ObjLoader(string objFilePath, string Name)
     {
@@ -87,6 +132,23 @@ public class ObjLoader
             return true;
         }
         else return false;
+    }
+
+    public void Set4DcamPos(Vec5 v)
+    {
+        _4DcamPos = v;
+    }
+    public void Set4DviewVec(Vec5 v)
+    {
+        _4DviewVec = v;
+    }
+    public void Set4DupVec1(Vec5 v)
+    {
+        _4DupVec1 = v;
+    }
+    public void Set4DupVec2(Vec5 v)
+    {
+        _4DupVec2 = v;
     }
 }
 /*
