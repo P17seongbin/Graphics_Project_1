@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 public class SampleCube : MonoBehaviour
 {
     MeshFilter objMesh;
+
+    ObjLoader HypercubeData;
 
     Vector3[] vertices = new Vector3[8];
     public float size = 1;
@@ -11,10 +11,14 @@ public class SampleCube : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-        GetComponent<Renderer>().material.color = Color.cyan;
+        HypercubeData = new ObjLoader("Hypercube", "Hypercube");
+        HypercubeData.LoadData();
         objMesh = GetComponent<MeshFilter>();
-        
+
+        project_3D();
+
+        int[] tri = HypercubeData.tris.ToArray();
+        /*
         int[] tri = new int[36];
         //맨 처음 Mesh의 각 triangular face를 구성하는 3개의 vertex(일련번호)를 지정해줍니다.
         tri[0] = 0;
@@ -69,22 +73,17 @@ public class SampleCube : MonoBehaviour
         tri[33] = 4;
         tri[34] = 7;
         tri[35] = 6;
-
+        */
         //지정한 face-vector 연동값을 mesh에 등록합니다.
         objMesh.mesh.triangles = tri;
-
-        ObjLoader l = new ObjLoader("Hypercube", "Hypercube");
-        l.LoadData();
-        Debug.Log(l.vertices);
-        Debug.Log(l.normals);
-        Debug.Log(l.tris);
     }
-
 
     // Update is called once per frame
     void Update()
     {
-        int i = k;
+        project_3D();
+        /*
+         *int i = k;
         float c = Mathf.Cos(Mathf.PI * i / 15);
         float s = Mathf.Sin(Mathf.PI * i / 15);
         //8개의 vertex의 좌표를 지정하고, 갱신합니다. 안에 있는 내용은 그냥 각 vertex를 적절히 회전시키는 거니 너무 신경쓰지 마세요 :P
@@ -113,7 +112,28 @@ public class SampleCube : MonoBehaviour
         //각 vertex별로 UV Coord 지정하는 기능도 있지만 여기에는 구현하지 않았습니다
 
         k = (k + 1) % 30;
+        */
     }
 
-    
+    /// <summary>
+    /// objLoader Class에서 할당된 4D vertex,normal값을 읽어와서 적절히 Project한 뒤 mesh data에 넘겨주는 역할을 합니다.
+    /// </summary>
+    void project_3D()
+    {
+        Vector4[] rawvertex = HypercubeData.vertices.ToArray();
+        int c = rawvertex.Length;
+        Vector3[] vertices = new Vector3[c];
+        
+        for (int i = 0; i < c; i++)
+        {
+            //Orthogonal projection
+            vertices[i] = new Vector3(rawvertex[i].x, rawvertex[i].y, rawvertex[i].z) + Vector3.one * rawvertex[i].w;
+            //perspective projection
+            //vertices[i] = new Vector3(rawvertex[i].x, rawvertex[i].y, rawvertex[i].z) * Mathf.Pow(1.2f,rawvertex[i].w);
+        }
+        objMesh.mesh.vertices = vertices;
+        objMesh.mesh.normals = vertices;
+
+    }
+
 }

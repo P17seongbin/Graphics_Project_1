@@ -70,13 +70,14 @@ public class ObjLoader
                     }
                     else if (objData[i].Substring(0, 1) == "f")//face data
                     {
+
                         var d = objData[i].Split(spaceParcer);
+
                         for (int j = 1; j < d.Length; j++)
                         {
                             var d2 = d[j].Split(new char[] { '/' });
                             vertices.Add(rawVertices[int.Parse(d2[0])]);
                             normals.Add(rawVertices[int.Parse(d2[1])]);
-
                             tris.Add(vc);
                             vc++;
                         }
