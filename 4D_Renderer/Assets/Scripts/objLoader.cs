@@ -12,20 +12,27 @@ public class ObjLoader
     public Vec5 Pos { get; private set; }
     public Vec5 Scale { get; private set; }
 
+    //Model의 좌표와 Scale을 편집합니다.
     public void SetScale(Vec5 scale) => Scale = scale;
     public void SetPos(Vec5 pos) => Pos = pos;
     public void AddPos(Vec5 dpos) => Pos = Pos + dpos;
     public void AddScale(Vec5 dscale) => Scale = Scale + dscale;
 
+    public void SetScale(float x, float y, float z, float w) => SetScale(new Vec5(x, y, z, w));
+    public void SetPos(float x, float y, float z, float w) => SetPos(new Vec5(x, y, z, w));
+    public void AddPos(float dx, float dy, float dz, float dw) => AddPos(new Vec5(dx, dy, dz, dw));
+    public void AddScale(float dx, float dy, float dz, float dw) => AddScale(new Vec5(dx, dy, dz, dw));
+
+
     string objName;
     string Path;
     //Obj 파일에 있는 vertex / vertex normal data 그 자체를 저장합니다.
-    List<Vector4> rawVertices;
-    List<Vector4> rawNormals;
+    List<Vec5> rawVertices;
+    List<Vec5> rawNormals;
 
     //실제로 Unity 상에 넘겨줘야 할 vertex,normal,tris 데이터입니다. 
-    public List<Vector4> vertices { get; private set; }
-    public List<Vector4> normals { get; private set; }
+    public List<Vec5> vertices { get; private set; }
+    public List<Vec5> normals { get; private set; }
     public List<int> tris { get; private set; }
 
 
@@ -95,12 +102,12 @@ public class ObjLoader
     //생성자.
     public ObjLoader(string objFilePath, string Name)
     {
-        vertices = new List<Vector4>();
-        normals = new List<Vector4>();
+        vertices = new List<Vec5>();
+        normals = new List<Vec5>();
         tris = new List<int>();
 
-        rawNormals = new List<Vector4>();
-        rawVertices = new List<Vector4>();
+        rawNormals = new List<Vec5>();
+        rawVertices = new List<Vec5>();
 
 
         Path = objFilePath;
@@ -130,13 +137,13 @@ public class ObjLoader
                     if (objData[i].Substring(0, 2) == "vn")//vertex normal data
                     {
                         var d = objData[i].Split(spaceParcer);
-                        Vector4 tV = new Vector4(float.Parse(d[1]), float.Parse(d[2]), float.Parse(d[3]), float.Parse(d[4]));
+                        Vec5 tV = new Vec5(float.Parse(d[1]), float.Parse(d[2]), float.Parse(d[3]), float.Parse(d[4]));
                         rawNormals.Add(tV);
                     }
                     else if (objData[i].Substring(0, 1) == "v")//vertex data
                     {
                         var d = objData[i].Split(spaceParcer);
-                        Vector4 tV = new Vector4(float.Parse(d[1]), float.Parse(d[2]), float.Parse(d[3]), float.Parse(d[4]));
+                        Vec5 tV = new Vec5(float.Parse(d[1]), float.Parse(d[2]), float.Parse(d[3]), float.Parse(d[4]));
                         rawVertices.Add(tV);
                     }
                     else if (objData[i].Substring(0, 1) == "f")//face data
