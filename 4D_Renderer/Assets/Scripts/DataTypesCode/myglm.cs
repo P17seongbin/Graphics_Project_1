@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
 namespace myglm
 {
     public class Vec5
@@ -213,37 +215,15 @@ namespace myglm
 
         private float Determinant_aux(float[,] mat_aux, int n)
         {
-            Mat5 origin = new Mat5(mat);
-            Mat5 mat3 = new Mat5();
+            double[,] dmat_aux = new double[5, 5];
             for (int i = 0; i < 5; i++)
             {
-                if (origin[i, i] == 0.0f)
-                {
-                    int j = 0;
-                    for (j = i + 1; j < 5; j++)
-                    {
-                        if (origin[j, i] != 0.0f)
-                            RowChange(i, j, origin);
-                    }
-                    if (j == 5)
-                        return 0;
-                }
-                for (int j = i + 1; j < 5; j++)
-                {
-                    float pivot = (origin[j, i] / origin[i, i]);
-                    for (int k = i; k < 5; k++)
-                    {
-                        origin[j, k] -= pivot * origin[i, k];
-                    }
-                    origin[j, i] = 0.0f;
-                }
+                for (int j = 0; j < 5; j++)
+                    dmat_aux[i, j] = mat_aux[i, j];
             }
-            float t = 1;
-            for (int i = 0; i < 5; i++)
-            {
-                t *= origin[i, i];
-            }
-            return t;
+            Matrix<double> myMatrix = DenseMatrix.OfArray(dmat_aux);
+            return (float)myMatrix.Determinant();
+
         }
         public Mat5(float scale = 1.0f)
         {
@@ -350,114 +330,28 @@ namespace myglm
             }
             return mat3;
         }
-        private static void RowChange(int i, int j, in Mat5 _mat)
-        {
-            float temp;
-            for (int k = 0; k < 5; i++)
-            {
-                temp = _mat[i, k];
-                _mat[i, k] = _mat[j, k];
-                _mat[j, k] = temp;
-            }
-        }
 
         public Mat5 Inverse()
         {
-            Mat5 origin = new Mat5(mat);
-            Mat5 mat3 = new Mat5();
-            for (int i = 0; i < 5; i++)
-            {
-                if (origin[i, i] == 0.0f)
-                {
-                    int j = 0;
-                    for (j = i + 1; j < 5; j++)
-                    {
-                        if (origin[j, i] != 0.0f)
-                            RowChange(i, j, origin);
-                    }
-                    if (j == 5)
-                        throw new System.DivideByZeroException();
-                }
-                for (int j = i + 1; j < 5; j++)
-                {
-                    float pivot = (origin[j, i] / origin[i, i]);
-                    for (int k = 0; k < 5; k++)
-                    {
-                        origin[j, k] -= pivot * origin[i, k];
-                        mat3[j, k] -= pivot * mat3[i, k];
-                    }
-                    origin[j, i] = 0.0f;
-                }
-            }
-            for (int i = 4; i >= 0; i--)
-            {
-                for (int j = i - 1; j >= 0; j--)
-                {
-                    float pivot = (origin[j, i] / origin[i, i]);
-                    for (int k = 0; k < 5; k++)
-                    {
-                        mat3[j, k] -= pivot * mat3[i, k];
-                    }
-                }
-            }
-            for (int i = 0; i < 5; i++)
-            {
-                float pivot = origin[i, i];
-                for (int j = 0; j < 5; j++)
-                {
-                    mat3[i, j] /= pivot;
-                }
-            }
-            return mat3;
+            return Inverse(new Mat5(mat));
         }
         public static Mat5 Inverse(Mat5 mat)
         {
-            Mat5 origin = new Mat5(mat);
-            Mat5 mat3 = new Mat5();
+            Mat5 result = new Mat5();
+            double[,] dmat_aux = new double[5, 5];
             for (int i = 0; i < 5; i++)
             {
-                if (origin[i, i] == 0.0f)
-                {
-                    int j = 0;
-                    for (j = i + 1; j < 5; j++)
-                    {
-                        if (origin[j, i] != 0.0f)
-                            RowChange(i, j, origin);
-                    }
-                    if (j == 5)
-                        throw new System.DivideByZeroException();
-                }
-                for (int j = i + 1; j < 5; j++)
-                {
-                    float pivot = (origin[j, i] / origin[i, i]);
-                    for (int k = 0; k < 5; k++)
-                    {
-                        origin[j, k] -= pivot * origin[i, k];
-                        mat3[j, k] -= pivot * mat3[i, k];
-                    }
-                    origin[j, i] = 0.0f;
-                }
-            }
-            for (int i = 4; i >= 0; i--)
-            {
-                for (int j = i - 1; j >= 0; j--)
-                {
-                    float pivot = (origin[j, i] / origin[i, i]);
-                    for (int k = 0; k < 5; k++)
-                    {
-                        mat3[j, k] -= pivot * mat3[i, k];
-                    }
-                }
-            }
-            for (int i = 0; i < 5; i++)
-            {
-                float pivot = origin[i, i];
                 for (int j = 0; j < 5; j++)
-                {
-                    mat3[i, j] /= pivot;
-                }
+                    dmat_aux[i, j] = mat[i, j];
             }
-            return mat3;
+            Matrix<double> myMatrix = DenseMatrix.OfArray(dmat_aux);
+            myMatrix = myMatrix.Inverse();
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                    result[i, j] = (float)myMatrix[i, j];
+            }
+            return result;
         }
         public static Vec5 operator *(Mat5 mat, Vec5 vec)
         {
