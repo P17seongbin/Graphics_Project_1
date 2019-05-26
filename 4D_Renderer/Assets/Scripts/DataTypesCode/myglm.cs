@@ -106,7 +106,7 @@ namespace myglm
             }
             return t;
         }
-        public static Vec5 CorssProduct(Vec5 _vec1, Vec5 _vec2, Vec5 _vec3)
+        public static Vec5 CrossProduct(Vec5 _vec1, Vec5 _vec2, Vec5 _vec3)
         {
             Vec5 vec4 = new Vec5();
             Vec5 vec1 = RenormalizeByv(_vec1);
@@ -234,7 +234,6 @@ namespace myglm
                     for (int k = i; k < 5; k++)
                     {
                         origin[j, k] -= pivot * origin[i, k];
-                        mat3[j, k] -= pivot * mat3[i, k];
                     }
                     origin[j, i] = 0.0f;
                 }
@@ -242,7 +241,7 @@ namespace myglm
             float t = 1;
             for (int i = 0; i < 5; i++)
             {
-                t *= mat3[i, i];
+                t *= origin[i, i];
             }
             return t;
         }
@@ -282,6 +281,7 @@ namespace myglm
         }
         public Mat5(float[,] _mat)
         {
+            mat = new float[5, 5];
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < 5; j++)
@@ -381,7 +381,7 @@ namespace myglm
                 for (int j = i + 1; j < 5; j++)
                 {
                     float pivot = (origin[j, i] / origin[i, i]);
-                    for (int k = i; k < 5; k++)
+                    for (int k = 0; k < 5; k++)
                     {
                         origin[j, k] -= pivot * origin[i, k];
                         mat3[j, k] -= pivot * mat3[i, k];
@@ -412,8 +412,8 @@ namespace myglm
         }
         public static Mat5 Inverse(Mat5 mat)
         {
-            Mat5 origin = new Mat5(mat);//mat
-            Mat5 mat3 = new Mat5();//identity
+            Mat5 origin = new Mat5(mat);
+            Mat5 mat3 = new Mat5();
             for (int i = 0; i < 5; i++)
             {
                 if (origin[i, i] == 0.0f)
@@ -430,10 +430,10 @@ namespace myglm
                 for (int j = i + 1; j < 5; j++)
                 {
                     float pivot = (origin[j, i] / origin[i, i]);
-                    for (int k = i; k < 5; k++)
+                    for (int k = 0; k < 5; k++)
                     {
                         origin[j, k] -= pivot * origin[i, k];
-                        mat[j, k] -= pivot * mat[i, k];
+                        mat3[j, k] -= pivot * mat3[i, k];
                     }
                     origin[j, i] = 0.0f;
                 }
@@ -445,7 +445,7 @@ namespace myglm
                     float pivot = (origin[j, i] / origin[i, i]);
                     for (int k = 0; k < 5; k++)
                     {
-                        mat[j, k] -= pivot * mat[i, k];
+                        mat3[j, k] -= pivot * mat3[i, k];
                     }
                 }
             }
@@ -487,6 +487,19 @@ namespace myglm
                 }
             }
             return temp;
+        }
+
+        public static void WriteMatrix(Mat5 mat)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    Console.Write(mat[i, j]);
+                    Console.Write(' ');
+                }
+                Console.Write('\n');
+            }
         }
     }
 }
