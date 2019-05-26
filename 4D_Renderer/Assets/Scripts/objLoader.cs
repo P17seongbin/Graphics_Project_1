@@ -8,6 +8,15 @@ using myglm;
 /// </summary>
 public class ObjLoader
 {
+    //Model의 좌표와 Scale을 저장합니다.
+    public Vec5 Pos { get; private set; }
+    public Vec5 Scale { get; private set; }
+
+    public void SetScale(Vec5 scale) => Scale = scale;
+    public void SetPos(Vec5 pos) => Pos = pos;
+    public void AddPos(Vec5 dpos) => Pos = Pos + dpos;
+    public void AddScale(Vec5 dscale) => Scale = Scale + dscale;
+
     string objName;
     string Path;
     //Obj 파일에 있는 vertex / vertex normal data 그 자체를 저장합니다.
@@ -27,9 +36,26 @@ public class ObjLoader
     public Vec5 _4DupVec2 { get; private set; }
 
 
-    public Mat5 getViewMatrix()
+    public Mat5 GetMVMatrix()
     {
-        Vec5 vec_l = Vec5.CorssProduct(_4DviewVec, _4DupVec1, _4DupVec2);
+        return GetViewMatrix() * GetModelMatrix();
+    }
+
+    public Mat5 GetModelMatrix()
+    {
+        Mat5 dmatrix = new Mat5(0);//
+        for(int i=0;i<4;i++)
+        {
+            dmatrix[i, i] = Scale[i];
+            dmatrix[i, 4] = Pos[i];
+        }
+        dmatrix[4, 4] = 1;
+        return dmatrix;
+    }
+    
+    public Mat5 GetViewMatrix()
+    {
+        Vec5 vec_l = Vec5.CrossProduct(_4DviewVec, _4DupVec1, _4DupVec2);
 
         //create left side of view matrix
         Mat5 t1 = new Mat5(0);//Zero matrix
@@ -63,9 +89,9 @@ public class ObjLoader
         //multiply t1 and t2 to get final view matrix
         Mat5 res = t1 * t2;
         return res;
-
     }
-    int vc = 0;          
+    int vc = 0;
+
     //생성자.
     public ObjLoader(string objFilePath, string Name)
     {
