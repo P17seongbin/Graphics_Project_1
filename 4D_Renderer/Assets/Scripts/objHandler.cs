@@ -5,25 +5,16 @@ using myglm;
 /// <summary>
 /// Resources 폴더 안에 있는 obj 파일로부터 단일 오브젝트의 데이터를 읽어서 저장하는 Class입니다.
 /// 외부 Object에서 원하는 데이터를 call할 수 있습니다.
+/// Object Transformation 관련 method는 objTransform 파일에 작성되어 있습니다.
 /// </summary>
-public class ObjHandler
+public partial class ObjHandler
 {
     //Model의 좌표와 Scale을 저장합니다.
-    public Vec5 Pos { get; private set; }
-    public Vec5 Scale { get; private set; }
+    public Mat5 ModelMatrix { get; private set; }
 
-    //Model의 좌표와 Scale을 편집합니다.
-    public void SetScale(Vec5 scale) => Scale = scale;
-    public void SetPos(Vec5 pos) => Pos = pos;
-    public void AddPos(Vec5 dpos) => Pos = Pos + dpos;
-    public void AddScale(Vec5 dscale) => Scale = Scale + dscale;
-
-    public void SetScale(float x, float y, float z, float w) => SetScale(new Vec5(x, y, z, w));
-    public void SetPos(float x, float y, float z, float w) => SetPos(new Vec5(x, y, z, w));
     public void AddPos(float dx, float dy, float dz, float dw) => AddPos(new Vec5(dx, dy, dz, dw));
-    public void AddScale(float dx, float dy, float dz, float dw) => AddScale(new Vec5(dx, dy, dz, dw));
-
-
+    public void MultiplyScale(float dx, float dy, float dz, float dw) => MultiplyScale(new Vec5(dx, dy, dz, dw));
+    
     string objName;
     string Path;
     //Obj 파일에 있는 vertex / vertex normal data 그 자체를 저장합니다.
@@ -42,33 +33,19 @@ public class ObjHandler
     public Vec5 _4DviewVec { get; set; }
     public Vec5 _4DupVec1 { get; set; }
     public Vec5 _4DupVec2 { get; set; }
-      
 
-
+        
     public Mat5 GetMVMatrix()
     {
-        return GetViewMatrix() * GetModelMatrix();
+        return GetViewMatrix() * ModelMatrix;
     }
-
-    public Mat5 GetModelMatrix()
-    {
-        Mat5 dmatrix = new Mat5(0);//
-        for(int i=0;i<4;i++)
-        {
-            dmatrix[i, i] = Scale[i];
-            dmatrix[i, 4] = Pos[i];
-        }
-        dmatrix[4, 4] = 1;
-        return dmatrix;
-    }
-    
     public Mat5 GetViewMatrix()
     {
         Vec5 vec_l = Vec5.CrossProduct(_4DviewVec, _4DupVec1, _4DupVec2);
 
         //create left side of view matrix
         Mat5 t1 = new Mat5(0);//Zero matrix
-        for(int i=0;i<4;i++)
+        for (int i = 0; i < 4; i++)
         {
             t1[0, i] = vec_l[i];
         }
@@ -88,7 +65,7 @@ public class ObjHandler
 
         //create right side of view matrix
         Mat5 t2 = new Mat5(0);
-        for(int i=0;i<4;i++)
+        for (int i = 0; i < 4; i++)
         {
             t1[i, i] = 1;
             t1[i, 4] = -1 * _4DcamPos[i];
@@ -104,6 +81,7 @@ public class ObjHandler
     //생성자.
     public ObjHandler(string objFilePath, string Name)
     {
+        ModelMatrix = new Mat5(1);//Identity
         vertices = new List<Vec5>();
         normals = new List<Vec5>();
         tris = new List<int>();
@@ -134,7 +112,7 @@ public class ObjHandler
             for (int i = 0; i < l; i++)
             {
                 //귀찮으니까 일단 If-else로 구현, 나중에 리팩토링 할 가능성이 크다.
-                if (objData[i].Length> 2)
+                if (objData[i].Length > 2)
                 {
                     if (objData[i].Substring(0, 2) == "vn")//vertex normal data
                     {
@@ -186,17 +164,3 @@ public class ObjHandler
         _4DupVec2 = v;
     }
 }
-/*
-v  0.000000 19.737080 -0.000000 19.737080
-v  -0.000000 19.357838 -3.850513 19.737080
-# 482 vertices
-
-vn  0.000000 1.000000 -0.000000 19.737080
-vn  -0.005744 0.976740 -0.214348 19.737080
-# 482 vertex normals
-
-g default
-f 0/0 1/33 2/34
-f 0/1 2/34 3/35
-# 960 faces
-*/

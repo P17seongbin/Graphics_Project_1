@@ -18,9 +18,6 @@ public class SampleCube : MonoBehaviour
         objData = new ObjHandler(filepath, "Hypercube");
         objData.LoadData();
 
-        objData.SetPos(new Vec5());
-        objData.SetScale(new Vec5(1,1,1,1));
-
         objMesh = GetComponent<MeshFilter>();
 
         project_3D();
@@ -34,8 +31,10 @@ public class SampleCube : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //objData.MultiplyScale(new Vec5(1,1,1,1.01f));
+        objData.Rotate_XW_YZ(0.01f, 0.01f);
        // HypercubeData.AddScale(new Vec5(0, 0, 0, 0.01f));
-        //project_3D();       
+        project_3D();       
     }
 
     /// <summary>
@@ -48,7 +47,7 @@ public class SampleCube : MonoBehaviour
         int c = rawvertex.Length;
         Vector3[] vertices = new Vector3[c];
 
-        Mat5 MV = objData.GetModelMatrix();
+        Mat5 MV = objData.ModelMatrix;
 
         for (int i = 0; i < c; i++)
         {
