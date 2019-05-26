@@ -4,7 +4,10 @@ public class SampleCube : MonoBehaviour
 {
     MeshFilter objMesh;
 
-    ObjLoader HypercubeData;
+    ObjHandler objData;
+
+    //파일명입니다, 기본값은 Hypercube입니다.
+    public string filepath = "Hypercube";
 
     Vector3[] vertices = new Vector3[8];
     public float size = 1;
@@ -12,17 +15,17 @@ public class SampleCube : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        HypercubeData = new ObjLoader("Hypercube", "Hypercube");
-        HypercubeData.LoadData();
+        objData = new ObjHandler(filepath, "Hypercube");
+        objData.LoadData();
 
-        HypercubeData.SetPos(new Vec5());
-        HypercubeData.SetScale(new Vec5(1,1,1,1));
+        objData.SetPos(new Vec5());
+        objData.SetScale(new Vec5(1,1,1,1));
 
         objMesh = GetComponent<MeshFilter>();
 
         project_3D();
 
-        int[] tri = HypercubeData.tris.ToArray();
+        int[] tri = objData.tris.ToArray();
        
         //지정한 face-vector 연동값을 mesh에 등록합니다.
         objMesh.mesh.triangles = tri;
@@ -31,8 +34,8 @@ public class SampleCube : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //HypercubeData.AddPos(new Vec5(0, 0, 0, 0.01f));
-        project_3D();       
+       // HypercubeData.AddScale(new Vec5(0, 0, 0, 0.01f));
+        //project_3D();       
     }
 
     /// <summary>
@@ -41,11 +44,11 @@ public class SampleCube : MonoBehaviour
     void project_3D()
     {
  
-        Vec5[] rawvertex = HypercubeData.vertices.ToArray();
+        Vec5[] rawvertex = objData.vertices.ToArray();
         int c = rawvertex.Length;
         Vector3[] vertices = new Vector3[c];
 
-        Mat5 MV = HypercubeData.GetModelMatrix();
+        Mat5 MV = objData.GetModelMatrix();
 
         for (int i = 0; i < c; i++)
         {

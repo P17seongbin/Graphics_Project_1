@@ -6,7 +6,7 @@ using myglm;
 /// Resources 폴더 안에 있는 obj 파일로부터 단일 오브젝트의 데이터를 읽어서 저장하는 Class입니다.
 /// 외부 Object에서 원하는 데이터를 call할 수 있습니다.
 /// </summary>
-public class ObjLoader
+public class ObjHandler
 {
     //Model의 좌표와 Scale을 저장합니다.
     public Vec5 Pos { get; private set; }
@@ -37,10 +37,12 @@ public class ObjLoader
 
 
     //현재 Object를 투영하고 있는 Camera에 대한 정보입니다.
-    public Vec5 _4DcamPos { get; private set; }
-    public Vec5 _4DviewVec { get; private set; }
-    public Vec5 _4DupVec1 { get; private set; }
-    public Vec5 _4DupVec2 { get; private set; }
+    //Vector관련 연산이 어떤게 필요할지 몰라 일단 private set 대신 set을 사용했습니다.
+    public Vec5 _4DcamPos { get; set; }
+    public Vec5 _4DviewVec { get; set; }
+    public Vec5 _4DupVec1 { get; set; }
+    public Vec5 _4DupVec2 { get; set; }
+      
 
 
     public Mat5 GetMVMatrix()
@@ -100,7 +102,7 @@ public class ObjLoader
     int vc = 0;
 
     //생성자.
-    public ObjLoader(string objFilePath, string Name)
+    public ObjHandler(string objFilePath, string Name)
     {
         vertices = new List<Vec5>();
         normals = new List<Vec5>();

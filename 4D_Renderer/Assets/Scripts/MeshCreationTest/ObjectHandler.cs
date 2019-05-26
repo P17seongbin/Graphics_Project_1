@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class ObjectHandler : MonoBehaviour
 {
-    ObjLoader LoadedObject; //Load된 4D .obj 파일입니다.
+    ObjHandler LoadedObject; //Load된 4D .obj 파일입니다.
 
     public string objPath;
 
