@@ -18,8 +18,8 @@ public partial class ObjHandler
     string objName;
     string Path;
     //Obj 파일에 있는 vertex / vertex normal data 그 자체를 저장합니다.
-    List<Vec5> rawVertices;
-    List<Vec5> rawNormals;
+    public List<Vec5> rawVertices;
+    public List<Vec5> rawNormals;
 
     //실제로 Unity 상에 넘겨줘야 할 vertex,normal,tris 데이터입니다. 
     public List<Vec5> vertices { get; private set; }
@@ -134,10 +134,7 @@ public partial class ObjHandler
                         for (int j = 1; j < d.Length; j++)
                         {
                             var d2 = d[j].Split(new char[] { '/' });
-                            vertices.Add(rawVertices[int.Parse(d2[0])]);
-                            normals.Add(rawVertices[int.Parse(d2[1])]);
-                            tris.Add(vc);
-                            vc++;
+                            tris.Add(int.Parse(d2[0]));
                         }
                     }
                 }

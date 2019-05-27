@@ -43,7 +43,7 @@ public class SampleCube : MonoBehaviour
     void project_3D()
     {
  
-        Vec5[] rawvertex = objData.vertices.ToArray();
+        Vec5[] rawvertex = objData.rawVertices.ToArray();
         int c = rawvertex.Length;
         Vector3[] vertices = new Vector3[c];
 
@@ -59,6 +59,7 @@ public class SampleCube : MonoBehaviour
         }
         objMesh.mesh.vertices = vertices;
         objMesh.mesh.normals = vertices;
+        objMesh.mesh.triangles = objData.tris.ToArray();
 
     }
 
