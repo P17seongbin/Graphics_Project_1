@@ -67,10 +67,10 @@ public partial class ObjHandler
         Mat5 t2 = new Mat5(0);
         for (int i = 0; i < 4; i++)
         {
-            t1[i, i] = 1;
-            t1[i, 4] = -1 * _4DcamPos[i];
+            t2[i, i] = 1;
+            t2[i, 4] = -1 * _4DcamPos[i];
         }
-        t1[4, 4] = 1;
+        t2[4, 4] = 1;
 
         //multiply t1 and t2 to get final view matrix
         Mat5 res = t1 * t2;
@@ -104,8 +104,6 @@ public partial class ObjHandler
         TextAsset objrawText = (TextAsset)Resources.Load(Path);
         if (objrawText != null) //Load가 성공적으로 이루어 졌나요?
         {
-
-
             var objData = objrawText.text.Split(splitFile, StringSplitOptions.None);
 
             int l = objData.Length;
@@ -143,18 +141,33 @@ public partial class ObjHandler
         }
         else return false;
     }
-
+    public void Set4DcamPos(float x, float y, float z, float w, float v = 1)
+    {
+        Set4DcamPos(new Vec5(x, y, z, w, v));
+    }
     public void Set4DcamPos(Vec5 v)
     {
         _4DcamPos = v;
+    }
+    public void Set4DviewVec(float x, float y, float z, float w, float v = 1)
+    {
+        Set4DviewVec(new Vec5(x, y, z, w, v));
     }
     public void Set4DviewVec(Vec5 v)
     {
         _4DviewVec = v;
     }
+    public void Set4DupVec1(float x, float y, float z, float w, float v = 1)
+    {
+        Set4DupVec1(new Vec5(x, y, z, w, v));
+    }
     public void Set4DupVec1(Vec5 v)
     {
         _4DupVec1 = v;
+    }
+    public void Set4DupVec2(float x, float y, float z, float w, float v = 1)
+    {
+        Set4DupVec2(new Vec5(x, y, z, w, v));
     }
     public void Set4DupVec2(Vec5 v)
     {

@@ -20,11 +20,22 @@ public class SampleCube : MonoBehaviour
 
         objMesh = GetComponent<MeshFilter>();
 
+       
+
+
+        //카메라의 초기값을 설정합니다.
+        Vec5 campos = new Vec5(0.7f, 20f, 0.1f, 20, 1);
+        objData.Set4DcamPos(campos);
+        Vec5 viewdirection = -campos.Normalize();
+        objData.Set4DviewVec(viewdirection);
+        Vec5 upvec1 = new Vec5(-viewdirection[2], viewdirection[3], viewdirection[0], -viewdirection[1], 1);
+        Vec5 upvec2 = new Vec5(-viewdirection[3], -viewdirection[2], viewdirection[1], viewdirection[0], 1);
+        objData.Set4DupVec1(upvec1);
+        objData.Set4DupVec2(upvec2);
+
         project_3D();
 
-        int[] tri = objData.tris.ToArray();
-       
-        //지정한 face-vector 연동값을 mesh에 등록합니다.
+        int[] tri = objData.tris.ToArray();        //지정한 face-vector 연동값을 mesh에 등록합니다.
         objMesh.mesh.triangles = tri;
     }
 
@@ -47,7 +58,7 @@ public class SampleCube : MonoBehaviour
         int c = rawvertex.Length;
         Vector3[] vertices = new Vector3[c];
 
-        Mat5 MV = objData.ModelMatrix;
+        Mat5 MV = objData.GetMVMatrix();
 
         for (int i = 0; i < c; i++)
         {
