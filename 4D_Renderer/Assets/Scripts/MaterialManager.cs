@@ -8,6 +8,7 @@ public class MaterialManager : MonoBehaviour
     public Material Wire;
     public Material Color;
     public Material TransWire;
+    public Material Dissolve_Cos;
     public Slider minBar;
     public Slider maxBar;
     public Vector4 range;
@@ -18,6 +19,7 @@ public class MaterialManager : MonoBehaviour
         Wire = Resources.Load("Temp") as Material;
         Color = Resources.Load("showSelectedRange") as Material;
         TransWire = Resources.Load("TransWire") as Material;
+        Dissolve_Cos = Resources.Load("dissolve_cosine") as Material;
         minBar = GameObject.Find("MinBar").GetComponent<Slider>();
         maxBar = GameObject.Find("MaxBar").GetComponent<Slider>();
 
@@ -36,6 +38,8 @@ public class MaterialManager : MonoBehaviour
             GameObject.Find("Object").GetComponent<MeshRenderer>().material = Color;
         else if (Input.GetKeyDown(KeyCode.F5))
             GameObject.Find("Object").GetComponent<MeshRenderer>().material = TransWire;
+        else if (Input.GetKeyDown(KeyCode.F6))
+            GameObject.Find("Object").GetComponent<MeshRenderer>().material = Dissolve_Cos;
     }
 
     private void minValChange(float val)
