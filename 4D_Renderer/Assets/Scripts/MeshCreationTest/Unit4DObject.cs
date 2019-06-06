@@ -1,7 +1,19 @@
-﻿using UnityEngine;
-using myglm;
-using System.Collections.Generic;
-using System.Collections;
+﻿using myglm;
+using UnityEngine;
+
+public class DoubleAxis
+{
+    public float xy, xz, xw, yz, yw, zw;
+    public DoubleAxis(float _xy,float _xz,float _xw,float _yz,float _yw,float _zw)
+    {
+        xy = _xy;
+        xz = _xz;
+        xw = _xw;
+        yz = _yz;
+        yw = _yw;
+        zw = _zw;
+    }
+}
 
 public class Unit4DObject : MonoBehaviour
 {
@@ -9,6 +21,7 @@ public class Unit4DObject : MonoBehaviour
     public ObjHandler objData;
 
     public Vector3 ASpeed;//Angular Speed.
+    public DoubleAxis ASpeed_4D;//4D Angular Speed
     public int Projtype = 0;
     public Vec5 updatedSC;
 
@@ -25,6 +38,7 @@ public class Unit4DObject : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ASpeed_4D = new DoubleAxis(0, 0, 0, 0, 0, 0);
         ASpeed = new Vector3(0, 0, 0);
 
         objData = new ObjHandler(filepath, "Cube");
@@ -60,8 +74,9 @@ public class Unit4DObject : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.F2))
             objData.Reload("CliffordTorus");
 
-
-        objData.Rotate_XW_YZ(0.01f, 0);
+        objData.Rotate_XW_YZ(ASpeed_4D.xw, ASpeed_4D.yz);
+        objData.Rotate_XY_ZW(ASpeed_4D.xy, ASpeed_4D.zw);
+        objData.Rotate_XZ_YW(ASpeed_4D.xz, ASpeed_4D.yw);
 
         objData.Stereographic_Center = updatedSC;
 
