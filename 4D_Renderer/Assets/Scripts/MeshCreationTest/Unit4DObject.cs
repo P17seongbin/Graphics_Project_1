@@ -43,10 +43,6 @@ public class Unit4DObject : MonoBehaviour
         objData.SetClippingDist(10f);
 
         updatedSC = new Vec5(0, 0, 0, 0, 1);
-        project_3D();
-
-        int[] tri = objData.Tris.ToArray();        //지정한 face-vector 연동값을 mesh에 등록합니다.
-        objMesh.mesh.triangles = tri;
     }
 
     // Update is called once per frame
@@ -113,8 +109,16 @@ public class Unit4DObject : MonoBehaviour
                     //vertices[i] = new Vector3(rawvertex[i].x, rawvertex[i].y, rawvertex[i].z) * rawvertex[i].w;//* Mathf.Pow(1.2f,rawvertex[i].w);
             }
         }
-        objMesh.mesh.vertices = vertices;
-        objMesh.mesh.triangles = objData.Tris.ToArray();
+
+        Mesh t = new Mesh
+        {
+            vertices = vertices,
+            triangles = objData.Tris.ToArray()
+        };
+
+        objMesh.mesh = t;
+
+
 
     }
 
