@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Temp
-  m_Shader: {fileID: 4800000, guid: a7de4bf0f370ca243b4604b8cd314ffc, type: 3}
+  m_Shader: {fileID: 4800000, guid: 349737f389860b042946c40afa327524, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
@@ -157,10 +157,10 @@ Material:
     - _UseUIAlphaClip: 0
     - _WindQuality: 0
     - _WireSmoothness: 0
-    - _WireThickness: 86
+    - _WireThickness: 39
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.5188679, g: 0, b: 0, a: 0}
+    - _BaseColor: {r: 0, g: 0.3301887, b: 0.28702676, a: 0}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}

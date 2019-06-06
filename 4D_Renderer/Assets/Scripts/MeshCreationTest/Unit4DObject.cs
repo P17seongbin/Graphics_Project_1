@@ -29,7 +29,7 @@ public class Unit4DObject : MonoBehaviour
         objMesh = GetComponent<MeshFilter>();
              
         //카메라의 초기값을 설정합니다.
-        Vec5 campos = new Vec5(0.7f, 0.1f, 0.1f, 20, 1);
+        Vec5 campos = new Vec5(0,0,0,1, 1);
         objData.Set4DcamPos(campos);
         Vec5 viewdirection = -campos.Normalize();
         objData.Set4DviewVec(viewdirection);
