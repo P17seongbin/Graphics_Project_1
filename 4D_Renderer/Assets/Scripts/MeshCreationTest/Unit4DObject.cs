@@ -1,18 +1,21 @@
 ﻿using UnityEngine;
 using myglm;
+using System.Collections.Generic;
+using System.Collections;
 
 public class Unit4DObject : MonoBehaviour
 {
     MeshFilter objMesh;
     public ObjHandler objData;
 
-    public int Projtype;
+    public Vector3 ASpeed;//Angular Speed.
+    public int Projtype = 0;
     public Vec5 updatedSC;
+
     public void IsetProjection(int type)
     {
         Projtype = type;
     }
-
     //파일명입니다, 기본값은 Hypercube입니다.
     public string filepath = "Hypercube";
 
@@ -22,16 +25,15 @@ public class Unit4DObject : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Default : Orthogonal Projection
-        Projtype = 2;
+        ASpeed = new Vector3(0, 0, 0);
 
-        objData = new ObjHandler(filepath, "Hypercube");
+        objData = new ObjHandler(filepath, "Cube");
         objData.LoadData();
 
         objMesh = GetComponent<MeshFilter>();
              
         //카메라의 초기값을 설정합니다.
-        Vec5 campos = new Vec5(0.7f, 0.1f, 0.1f, 20, 1);
+        Vec5 campos = new Vec5(0,0,0,1, 1);
         objData.Set4DcamPos(campos);
         Vec5 viewdirection = -campos.Normalize();
         objData.Set4DviewVec(viewdirection);
@@ -41,27 +43,36 @@ public class Unit4DObject : MonoBehaviour
         objData.Set4DupVec2(upvec2);
 
         objData.SetClippingDist(10f);
-
         updatedSC = new Vec5(0, 0, 0, 0, 1);
-    }
 
+        //StartCoroutine(Keyhandler());
+    }
+    
+    
+    
     // Update is called once per frame
     void Update()
     {
-        //objData.MultiplyScale(new Vec5(1,1,1,1.01f));
+        transform.Rotate(ASpeed);
+
+        if (Input.GetKeyDown(KeyCode.F1))
+            objData.Reload("Hypercube");
+        else if (Input.GetKeyDown(KeyCode.F2))
+            objData.Reload("CliffordTorus");
+
+
         objData.Rotate_XW_YZ(0.01f, 0);
-        //objData.Rotate_XW_YZ(0.01f, 0.01f);
-        // HypercubeData.AddScale(new Vec5(0, 0, 0, 0.01f));
+
         objData.Stereographic_Center = updatedSC;
-        project_3D();       
+
+        Project_3D();       
     }
 
     /// <summary>
     /// objLoader Class에서 할당된 4D vertex,normal값을 읽어와서 적절히 Project한 뒤 mesh data에 넘겨주는 역할을 합니다.
     /// </summary>
-    void project_3D()
+    void Project_3D()
     {
-
         Vec5[] rawvertex = objData.rawVertices.ToArray();
         int c = rawvertex.Length;
         Vector3[] vertices = new Vector3[c];
@@ -71,7 +82,7 @@ public class Unit4DObject : MonoBehaviour
 
         for (int i = 0; i < c; i++)
         {
-            Vec5 viewvertex = rawvertex[i];
+            Vec5 viewvertex = MV * rawvertex[i];
 
             //귀찮으니까 Switch Case문으로 구현, 최적화가 필요하면 리팩토링
             switch (Projtype)
@@ -91,7 +102,7 @@ public class Unit4DObject : MonoBehaviour
                 //stereographic
                 case 2:
                     {
-                        Vec5 nv = ((viewvertex-sc).Normalize());
+                        Vec5 nv = ((viewvertex - sc).Normalize());
                         float sx = nv.x / (sc.w + 1.0f - nv.w);
                         float sy = nv.y / (sc.w + 1.0f - nv.w);
                         float sz = nv.z / (sc.w + 1.0f - nv.w);
@@ -101,7 +112,7 @@ public class Unit4DObject : MonoBehaviour
                     }
                 case 3: //make a slice about w and map
                     {
-                        vertices[i] = 10* (new Vector3(viewvertex.x, viewvertex.y, viewvertex.z) + Vector3.one * viewvertex.v);
+                        vertices[i] = 10 * (new Vector3(viewvertex.x, viewvertex.y, viewvertex.z) + Vector3.one * viewvertex.v);
 
                         break;
                     }
@@ -109,26 +120,11 @@ public class Unit4DObject : MonoBehaviour
                     //vertices[i] = new Vector3(rawvertex[i].x, rawvertex[i].y, rawvertex[i].z) * rawvertex[i].w;//* Mathf.Pow(1.2f,rawvertex[i].w);
             }
         }
-
         Mesh t = new Mesh
         {
             vertices = vertices,
             triangles = objData.Tris.ToArray()
         };
-
         objMesh.mesh = t;
-
-
-
     }
-
-    void SetProjection(int type)
-    {
-        //Valid type
-        if (0 <= type && type <= 2)
-            Projtype = type; 
-    }
-
-
-
 }

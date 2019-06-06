@@ -87,6 +87,13 @@ public partial class ObjHandler
     //생성할 때 입력한 Path로 Load를 시도합니다. 성공할 경우 True를 리턴합니다.
     public bool LoadData()
     {
+        //Clear buffer
+        rawVertices = new List<Vec5>();
+        rawNormals = new List<Vec5>();
+        Vertices = new List<Vec5>();
+        Normals = new List<Vec5>();
+        Tris = new List<int>();
+
         //Line by Line Parser
         var splitFile = new string[] { "\r\n", "\r", "\n" };
         var spaceParcer = new char[] { ' ' };
@@ -132,6 +139,11 @@ public partial class ObjHandler
         else return false;
     }
 
+    public void Reload(string newFilePath)
+    {
+        Path = newFilePath;
+        LoadData();
+    }
     //생성자.
     public ObjHandler(string objFilePath, string Name)
     {
