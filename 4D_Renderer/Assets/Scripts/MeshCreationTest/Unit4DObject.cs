@@ -5,8 +5,12 @@ public class Unit4DObject : MonoBehaviour
     MeshFilter objMesh;
     ObjHandler objData;
 
-    int Projtype;
+    static int Projtype;
 
+    public void IsetProjection(int type)
+    {
+        Projtype = type;
+    }
 
     //파일명입니다, 기본값은 Hypercube입니다.
     public string filepath = "Hypercube";
@@ -34,6 +38,8 @@ public class Unit4DObject : MonoBehaviour
         Vec5 upvec2 = new Vec5(-viewdirection[3], -viewdirection[2], viewdirection[1], viewdirection[0], 1);
         objData.Set4DupVec1(upvec1);
         objData.Set4DupVec2(upvec2);
+
+        objData.SetClippingDist(10f);
 
 
         project_3D();
@@ -112,9 +118,6 @@ public class Unit4DObject : MonoBehaviour
             Projtype = type; 
     }
 
-    public void IsetProjection(Unit4DObject obj, int type)
-    {
-        obj.SetProjection(type);
-    }
+
 
 }

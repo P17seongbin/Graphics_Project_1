@@ -153,6 +153,10 @@ public partial class ObjHandler
         Stereographic_Center = new Vec5(0.5f, 0.5f, 0.5f, 0.5f);
     }
 
+    public void SetClippingDist(float d)
+    {
+        Clipping_dist = d;
+    }
     public void Set4DcamPos(float x, float y, float z, float w, float v = 1)
     {
         Set4DcamPos(new Vec5(x, y, z, w, v));
