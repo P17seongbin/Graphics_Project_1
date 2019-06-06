@@ -7,6 +7,9 @@ using UnityEngine;
 /// 
 public partial class ObjHandler
 {
+  
+
+
     //Model의 좌표와 Scale을 편집합니다.
     public void AddPos(Vec5 dpos)
     {
