@@ -362,7 +362,7 @@ namespace OBJ_MAKER
         private int N;
         public ParametrizedObject(float _r, float _theta_min, float _theta_max, float _phi_min, float _phi_max)
         {
-            N = 100;
+            N = 50;
             r = _r;
             theta_min = _theta_min;
             theta_max = _theta_max;

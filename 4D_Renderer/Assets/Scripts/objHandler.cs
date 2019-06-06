@@ -150,7 +150,7 @@ public partial class ObjHandler
         Path = objFilePath;
         objName = Name;
 
-        Stereographic_Center = new Vec5(0.5f, 0.5f, 0.5f, 0.5f);
+        Stereographic_Center = new Vec5(0, 0, 0, 0, 1);
     }
 
     public void SetClippingDist(float d)

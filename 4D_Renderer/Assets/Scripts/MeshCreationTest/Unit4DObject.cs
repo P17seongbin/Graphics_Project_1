@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using myglm;
+
 public class Unit4DObject : MonoBehaviour
 {
     MeshFilter objMesh;
-    ObjHandler objData;
+    public ObjHandler objData;
 
-    static int Projtype;
-
+    public int Projtype;
+    public Vec5 updatedSC;
     public void IsetProjection(int type)
     {
         Projtype = type;
@@ -41,7 +42,7 @@ public class Unit4DObject : MonoBehaviour
 
         objData.SetClippingDist(10f);
 
-
+        updatedSC = new Vec5(0, 0, 0, 0, 1);
         project_3D();
 
         int[] tri = objData.Tris.ToArray();        //지정한 face-vector 연동값을 mesh에 등록합니다.
@@ -54,7 +55,8 @@ public class Unit4DObject : MonoBehaviour
         //objData.MultiplyScale(new Vec5(1,1,1,1.01f));
         objData.Rotate_XW_YZ(0.01f, 0);
         //objData.Rotate_XW_YZ(0.01f, 0.01f);
-       // HypercubeData.AddScale(new Vec5(0, 0, 0, 0.01f));
+        // HypercubeData.AddScale(new Vec5(0, 0, 0, 0.01f));
+        objData.Stereographic_Center = updatedSC;
         project_3D();       
     }
 
@@ -93,10 +95,10 @@ public class Unit4DObject : MonoBehaviour
                 //stereographic
                 case 2:
                     {
-                        Vec5 nv = (viewvertex-sc).Normalize();
-                        float sx = nv.x / (0.5f - nv.w);
-                        float sy = nv.y / (0.5f - nv.w);
-                        float sz = nv.z / (0.5f - nv.w);
+                        Vec5 nv = ((viewvertex-sc).Normalize());
+                        float sx = nv.x / (sc.w + 1.0f - nv.w);
+                        float sy = nv.y / (sc.w + 1.0f - nv.w);
+                        float sz = nv.z / (sc.w + 1.0f - nv.w);
                         vertices[i] = new Vector3(sx, sy, sz);
 
                         break;
