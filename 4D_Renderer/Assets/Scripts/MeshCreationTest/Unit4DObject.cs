@@ -75,7 +75,7 @@ public class Unit4DObject : MonoBehaviour
 
         for (int i = 0; i < c; i++)
         {
-            Vec5 viewvertex = MV * rawvertex[i];
+            Vec5 viewvertex = rawvertex[i];
 
             //귀찮으니까 Switch Case문으로 구현, 최적화가 필요하면 리팩토링
             switch (Projtype)
@@ -100,6 +100,12 @@ public class Unit4DObject : MonoBehaviour
                         float sy = nv.y / (sc.w + 1.0f - nv.w);
                         float sz = nv.z / (sc.w + 1.0f - nv.w);
                         vertices[i] = new Vector3(sx, sy, sz);
+
+                        break;
+                    }
+                case 3: //make a slice about w and map
+                    {
+                        vertices[i] = 10* (new Vector3(viewvertex.x, viewvertex.y, viewvertex.z) + Vector3.one * viewvertex.v);
 
                         break;
                     }
