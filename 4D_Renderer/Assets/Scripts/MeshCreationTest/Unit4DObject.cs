@@ -106,7 +106,7 @@ public class Unit4DObject : MonoBehaviour
             }
         }
         objMesh.mesh.vertices = vertices;
-        objMesh.mesh.triangles = objData.tris.ToArray();
+        objMesh.mesh.triangles = objData.Tris.ToArray();
 
     }
 
