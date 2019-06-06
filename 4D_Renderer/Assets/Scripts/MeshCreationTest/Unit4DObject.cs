@@ -154,7 +154,7 @@ public class Unit4DObject : MonoBehaviour
             {
                 vertices[i].x -= midvertices[0];
                 vertices[i].y -= midvertices[1];
-                vertices[i].z -= (midvertices[2] - 5);
+                vertices[i].z -= (midvertices[2]);
             }
 
 
