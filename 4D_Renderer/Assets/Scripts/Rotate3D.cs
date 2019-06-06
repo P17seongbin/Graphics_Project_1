@@ -59,9 +59,9 @@ public class Rotate3D : MonoBehaviour
 
     public void SetSpeed(string s)
     {
-        Debug.Log(s);
+
         if (float.TryParse(s, out float res)) speed = res;
-        Debug.Log(res);
+
     }
 
 }
