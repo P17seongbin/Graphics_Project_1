@@ -50,6 +50,7 @@ public class Rotate3D : MonoBehaviour
         y = 0;
         z = 0;
         Obj.ASpeed = new Vector3(x, y, z);
+        Obj.transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 
     private void Start()

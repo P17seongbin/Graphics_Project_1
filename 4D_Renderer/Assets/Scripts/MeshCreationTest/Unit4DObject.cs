@@ -56,7 +56,7 @@ public class Unit4DObject : MonoBehaviour
         objData.Set4DupVec1(upvec1);
         objData.Set4DupVec2(upvec2);
 
-        objData.SetClippingDist(10f);
+        objData.SetClippingDist(0.5f);
         updatedSC = new Vec5(0, 0, 0, 0, 1);
 
         //StartCoroutine(Keyhandler());
@@ -94,6 +94,7 @@ public class Unit4DObject : MonoBehaviour
 
         Mat5 MV = objData.GetMVMatrix();
         Vec5 sc = objData.Stereographic_Center;
+        float cd = objData.Clipping_dist;
 
         for (int i = 0; i < c; i++)
         {
@@ -111,7 +112,7 @@ public class Unit4DObject : MonoBehaviour
                 //perspective
                 case 1:
                     {
-                        vertices[i] = ((new Vector3(viewvertex.x, viewvertex.y, viewvertex.z) * (viewvertex.w /2)));
+                        vertices[i] = ((new Vector3(viewvertex.x, viewvertex.y, viewvertex.z) * (viewvertex.w / cd)));
                         break;
                     }
                 //stereographic

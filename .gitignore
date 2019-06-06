@@ -53,3 +53,5 @@ sysinfo.txt
 4D_Renderer/Packages/MathNet.Numerics.4.7.0/lib/netstandard2.0/MathNet.Numerics.dll
 4D_Renderer/Packages/MathNet.Numerics.4.7.0/lib/netstandard1.3/MathNet.Numerics.xml
 4D_Renderer/Assets/TextMesh Pro/Sprites.meta
+Document/
+Baked/

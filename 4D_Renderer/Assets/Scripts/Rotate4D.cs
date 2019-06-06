@@ -21,7 +21,6 @@ public class Rotate4D : MonoBehaviour
     }
     public void SetSpeed(string s)
     {
-
         if (float.TryParse(s, out float res)) speed = res;
     }
 
