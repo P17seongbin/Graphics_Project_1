@@ -15,7 +15,7 @@ public class MaterialManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Wire = Resources.Load("Temp") as Material;
+        Wire = Resources.Load("Wire") as Material;
         Color = Resources.Load("showSelectedRange") as Material;
         TransWire = Resources.Load("TransWire") as Material;
         minBar = GameObject.Find("MinBar").GetComponent<Slider>();
