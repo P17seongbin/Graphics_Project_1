@@ -57,6 +57,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Boolean_A1EAB9BB: 0
+    - Vector1_1AA9A7FF: 25
+    - Vector1_C2D85E1A: 3
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
