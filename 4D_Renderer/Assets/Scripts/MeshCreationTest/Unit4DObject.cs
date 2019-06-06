@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using myglm;
-public class SampleCube : MonoBehaviour
+public class Unit4DObject : MonoBehaviour
 {
     MeshFilter objMesh;
 
@@ -19,10 +19,7 @@ public class SampleCube : MonoBehaviour
         objData.LoadData();
 
         objMesh = GetComponent<MeshFilter>();
-
-       
-
-
+             
         //카메라의 초기값을 설정합니다.
         Vec5 campos = new Vec5(0.7f, 20f, 0.1f, 20, 1);
         objData.Set4DcamPos(campos);

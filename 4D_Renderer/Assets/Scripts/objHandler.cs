@@ -141,6 +141,7 @@ public partial class ObjHandler
         }
         else return false;
     }
+
     public void Set4DcamPos(float x, float y, float z, float w, float v = 1)
     {
         Set4DcamPos(new Vec5(x, y, z, w, v));
