@@ -24,7 +24,7 @@ public class Unit4DObject : MonoBehaviour
     public DoubleAxis ASpeed_4D;//4D Angular Speed
     public int Projtype = 0;
     public Vec5 updatedSC;
-
+    public float scale = 3;
     public void IsetProjection(int type)
     {
         Projtype = type;
@@ -105,13 +105,13 @@ public class Unit4DObject : MonoBehaviour
                 //Orthogonal
                 case 0:
                     {
-                        vertices[i] = new Vector3(viewvertex.x, viewvertex.y, viewvertex.z);
+                        vertices[i] = scale * (new Vector3(viewvertex.x, viewvertex.y, viewvertex.z).normalized);
                         break;
                     }
                 //perspective
                 case 1:
                     {
-                        vertices[i] = new Vector3(viewvertex.x, viewvertex.y, viewvertex.z) * (viewvertex.w / objData.Clipping_dist);
+                        vertices[i] = ((new Vector3(viewvertex.x, viewvertex.y, viewvertex.z) * (viewvertex.w /2)));
                         break;
                     }
                 //stereographic
@@ -121,20 +121,43 @@ public class Unit4DObject : MonoBehaviour
                         float sx = nv.x / (sc.w + 1.0f - nv.w);
                         float sy = nv.y / (sc.w + 1.0f - nv.w);
                         float sz = nv.z / (sc.w + 1.0f - nv.w);
-                        vertices[i] = new Vector3(sx, sy, sz);
+                        vertices[i] = (new Vector3(sx, sy, sz).normalized)* scale;
 
                         break;
                     }
                 case 3: //make a slice about w and map
                     {
-                        vertices[i] = 10 * (new Vector3(viewvertex.x, viewvertex.y, viewvertex.z) + Vector3.one * viewvertex.v);
-
+                        vertices[i] = scale * ((new Vector3(viewvertex.x, viewvertex.y, viewvertex.z) + Vector3.one * viewvertex.w).normalized);
                         break;
                     }
+                case 4: //make a slice about w and map
+                    {
+                        vertices[i] = scale * ((new Vector3(viewvertex.x, viewvertex.y, viewvertex.z) + (new Vector3(0.1f, 0.5f, 0.2f)) * viewvertex.w).normalized);
+                        break;
+                    }
+
                     //perspective projection
                     //vertices[i] = new Vector3(rawvertex[i].x, rawvertex[i].y, rawvertex[i].z) * rawvertex[i].w;//* Mathf.Pow(1.2f,rawvertex[i].w);
             }
         }
+            float[] midvertices = new float[3];
+            for (int i=0; i<c; i++)
+            {
+                midvertices[0] += vertices[i].x;
+                midvertices[1] += vertices[i].y;
+                midvertices[2] += vertices[i].z;
+            }
+            midvertices[0] /= c;
+            midvertices[1] /= c;
+            midvertices[2] /= c;
+            for (int i=0; i<c; i++)
+            {
+                vertices[i].x -= midvertices[0];
+                vertices[i].y -= midvertices[1];
+                vertices[i].z -= (midvertices[2] - 5);
+            }
+
+
         Mesh t = new Mesh
         {
             vertices = vertices,
