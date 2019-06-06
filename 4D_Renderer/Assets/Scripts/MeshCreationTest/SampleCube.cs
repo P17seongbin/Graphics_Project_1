@@ -36,7 +36,6 @@ public class SampleCube : MonoBehaviour
         project_3D();
 
         int[] tri = objData.tris.ToArray();        //지정한 face-vector 연동값을 mesh에 등록합니다.
-        objMesh.mesh.triangles = tri;
     }
 
     // Update is called once per frame
@@ -69,7 +68,6 @@ public class SampleCube : MonoBehaviour
             //vertices[i] = new Vector3(rawvertex[i].x, rawvertex[i].y, rawvertex[i].z) * rawvertex[i].w;//* Mathf.Pow(1.2f,rawvertex[i].w);
         }
         objMesh.mesh.vertices = vertices;
-        objMesh.mesh.normals = vertices;
         objMesh.mesh.triangles = objData.tris.ToArray();
 
     }

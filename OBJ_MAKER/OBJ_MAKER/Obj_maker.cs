@@ -380,10 +380,10 @@ namespace OBJ_MAKER
             {
                 for (int j = 0; j < N; j++)
                 {
-                    v.Add(new Tuple<float, float, float, float>(r * (float)Math.Cos(theta_min + (theta_max - theta_min) * i / 100), r * (float)Math.Sin(theta_min + (theta_max - theta_min) * i / 100),
-                        r * (float)Math.Cos(phi_min + (phi_max - phi_min) * j / 100), r * (float)Math.Sin(phi_min + (phi_max - phi_min) * j / 100)));
-                    n.Add(new Tuple<float, float, float, float>(-r * (float)Math.Sin(theta_min + (theta_max - theta_min) * i / 100), r * (float)Math.Cos(theta_min + (theta_max - theta_min) * i / 100),
-                        -r * (float)Math.Sin(phi_min + (phi_max - phi_min) * j / 100), r * (float)Math.Cos(phi_min + (phi_max - phi_min) * j / 100)));
+                    v.Add(new Tuple<float, float, float, float>(r * (float)Math.Cos(theta_min + (theta_max - theta_min) * i / N), r * (float)Math.Sin(theta_min + (theta_max - theta_min) * i / N),
+                        r * (float)Math.Cos(phi_min + (phi_max - phi_min) * j / N), r * (float)Math.Sin(phi_min + (phi_max - phi_min) * j / N)));
+                    n.Add(new Tuple<float, float, float, float>(-r * (float)Math.Sin(theta_min + (theta_max - theta_min) * i / N), r * (float)Math.Cos(theta_min + (theta_max - theta_min) * i / N),
+                        -r * (float)Math.Sin(phi_min + (phi_max - phi_min) * j / N), r * (float)Math.Cos(phi_min + (phi_max - phi_min) * j / N)));
                 }
             }
             for (int i = 0; i < N; i++)
@@ -408,8 +408,8 @@ namespace OBJ_MAKER
                         N * i + ((j + 1) % N), N * i + ((j + 1) % N),
                         N * ((i + 1) % N) + j, N * ((i + 1) % N) + j));
                     f.Add(new Tuple<int, int, int, int, int, int>(N * ((i + 1) % N) + ((j + 1) % N), N * ((i + 1) % N) + ((j + 1) % N),
-                        N * i + ((j + 1) % N), N * i + ((j + 1) % N),
-                        N * ((i + 1) % N) + j, N * ((i + 1) % N) + j));
+                         N * ((i + 1) % N) + j, N * ((i + 1) % N) + j,
+                         N * i + ((j + 1) % N), N * i + ((j + 1) % N)));
                 }
             }
         }
