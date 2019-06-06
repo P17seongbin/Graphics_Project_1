@@ -9,6 +9,7 @@ public class MaterialManager : MonoBehaviour
     public Material Color;
     public Slider minBar;
     public Slider maxBar;
+    public Vector4 range;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +21,8 @@ public class MaterialManager : MonoBehaviour
 
         minBar.onValueChanged.AddListener(minValChange);
         maxBar.onValueChanged.AddListener(maxValChange);
+        range.x = -0.5f;
+        range.y = 0.5f;
     }
 
     // Update is called once per frame
@@ -33,12 +36,14 @@ public class MaterialManager : MonoBehaviour
 
     private void minValChange(float val)
     {
-        GameObject.Find("Object").GetComponent<MeshRenderer>().material.SetFloat("range.x", val);
+        range.x = val;
+        GameObject.Find("Object").GetComponent<MeshRenderer>().material.SetVector("Vector2_E2EEE810", range);
     }
 
     private void maxValChange(float val)
     {
-        GameObject.Find("Object").GetComponent<MeshRenderer>().material.SetFloat("range.y", val);
+        range.y = val;
+        GameObject.Find("Object").GetComponent<MeshRenderer>().material.SetVector("Vector2_E2EEE810", range);
     }
 
 }
