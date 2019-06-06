@@ -8,6 +8,7 @@ using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 namespace myglm
 {
+    [System.Serializable]
     public class Vec5
     {
         public float x = 0;

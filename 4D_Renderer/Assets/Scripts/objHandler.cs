@@ -18,13 +18,13 @@ public partial class ObjHandler
     string objName;
     string Path;
     //Obj 파일에 있는 vertex / vertex normal data 그 자체를 저장합니다.
-    List<Vec5> rawVertices;
-    List<Vec5> rawNormals;
+    public List<Vec5> rawVertices;
+    public List<Vec5> rawNormals;
 
     //실제로 Unity 상에 넘겨줘야 할 vertex,normal,tris 데이터입니다. 
-    public List<Vec5> vertices { get; private set; }
-    public List<Vec5> normals { get; private set; }
-    public List<int> tris { get; private set; }
+    public List<Vec5> Vertices { get; private set; }
+    public List<Vec5> Normals { get; private set; }
+    public List<int> Tris { get; private set; }
 
 
     //현재 Object를 투영하고 있는 Camera에 대한 정보입니다.
@@ -34,7 +34,11 @@ public partial class ObjHandler
     public Vec5 _4DupVec1 { get; set; }
     public Vec5 _4DupVec2 { get; set; }
 
-        
+    ///4D Clipping surface입니다, perspecive projection에서만 유효합니다.
+    public float Clipping_dist { get; private set; }
+    //Stereographic Sphere의 중심점입니다. Stereographic projection에서만 유효합니다.
+    public Vec5 Stereographic_Center { get; set; }
+
     public Mat5 GetMVMatrix()
     {
         return GetViewMatrix() * ModelMatrix;
@@ -67,10 +71,10 @@ public partial class ObjHandler
         Mat5 t2 = new Mat5(0);
         for (int i = 0; i < 4; i++)
         {
-            t1[i, i] = 1;
-            t1[i, 4] = -1 * _4DcamPos[i];
+            t2[i, i] = 1;
+            t2[i, 4] = -1 * _4DcamPos[i];
         }
-        t1[4, 4] = 1;
+        t2[4, 4] = 1;
 
         //multiply t1 and t2 to get final view matrix
         Mat5 res = t1 * t2;
@@ -78,21 +82,7 @@ public partial class ObjHandler
     }
     int vc = 0;
 
-    //생성자.
-    public ObjHandler(string objFilePath, string Name)
-    {
-        ModelMatrix = new Mat5(1);//Identity
-        vertices = new List<Vec5>();
-        normals = new List<Vec5>();
-        tris = new List<int>();
 
-        rawNormals = new List<Vec5>();
-        rawVertices = new List<Vec5>();
-
-
-        Path = objFilePath;
-        objName = Name;
-    }
 
     //생성할 때 입력한 Path로 Load를 시도합니다. 성공할 경우 True를 리턴합니다.
     public bool LoadData()
@@ -104,8 +94,6 @@ public partial class ObjHandler
         TextAsset objrawText = (TextAsset)Resources.Load(Path);
         if (objrawText != null) //Load가 성공적으로 이루어 졌나요?
         {
-
-
             var objData = objrawText.text.Split(splitFile, StringSplitOptions.None);
 
             int l = objData.Length;
@@ -134,10 +122,7 @@ public partial class ObjHandler
                         for (int j = 1; j < d.Length; j++)
                         {
                             var d2 = d[j].Split(new char[] { '/' });
-                            vertices.Add(rawVertices[int.Parse(d2[0])]);
-                            normals.Add(rawVertices[int.Parse(d2[1])]);
-                            tris.Add(vc);
-                            vc++;
+                            Tris.Add(int.Parse(d2[0]));
                         }
                     }
                 }
@@ -147,17 +132,58 @@ public partial class ObjHandler
         else return false;
     }
 
+    //생성자.
+    public ObjHandler(string objFilePath, string Name)
+    {
+        Clipping_dist = 1;
+
+
+        ModelMatrix = new Mat5(1);//Identity
+        Vertices = new List<Vec5>();
+        Normals = new List<Vec5>();
+        Tris = new List<int>();
+
+        rawNormals = new List<Vec5>();
+        rawVertices = new List<Vec5>();
+
+
+        Path = objFilePath;
+        objName = Name;
+
+        Stereographic_Center = new Vec5(0, 0, 0, 0, 1);
+    }
+
+    public void SetClippingDist(float d)
+    {
+        Clipping_dist = d;
+    }
+    public void Set4DcamPos(float x, float y, float z, float w, float v = 1)
+    {
+        Set4DcamPos(new Vec5(x, y, z, w, v));
+    }
     public void Set4DcamPos(Vec5 v)
     {
         _4DcamPos = v;
+    }
+    public void Set4DviewVec(float x, float y, float z, float w, float v = 1)
+    {
+        Set4DviewVec(new Vec5(x, y, z, w, v));
     }
     public void Set4DviewVec(Vec5 v)
     {
         _4DviewVec = v;
     }
+    public void Set4DupVec1(float x, float y, float z, float w, float v = 1)
+    {
+        Set4DupVec1(new Vec5(x, y, z, w, v));
+    }
     public void Set4DupVec1(Vec5 v)
     {
         _4DupVec1 = v;
+    }
+    public void Set4DupVec2(float x, float y, float z, float w, float v = 1)
+    {
+        Set4DupVec2(new Vec5(x, y, z, w, v));
     }
     public void Set4DupVec2(Vec5 v)
     {
