@@ -7,6 +7,7 @@ using myglm;
 /// 외부 Object에서 원하는 데이터를 call할 수 있습니다.
 /// Object Transformation 관련 method는 objTransform 파일에 작성되어 있습니다.
 /// </summary>
+
 public partial class ObjHandler
 {
     //Model의 좌표와 Scale을 저장합니다.
