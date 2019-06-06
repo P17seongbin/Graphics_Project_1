@@ -8,8 +8,10 @@ public class Unit4DObject : MonoBehaviour
     MeshFilter objMesh;
     public ObjHandler objData;
 
+    public Vector3 ASpeed;//Angular Speed.
     public int Projtype = 0;
     public Vec5 updatedSC;
+
     public void IsetProjection(int type)
     {
         Projtype = type;
@@ -23,6 +25,8 @@ public class Unit4DObject : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ASpeed = new Vector3(0, 0, 0);
+
         objData = new ObjHandler(filepath, "Cube");
         objData.LoadData();
 
@@ -43,15 +47,17 @@ public class Unit4DObject : MonoBehaviour
 
         //StartCoroutine(Keyhandler());
     }
-
+    
+    
     
     // Update is called once per frame
     void Update()
     {
+        transform.Rotate(ASpeed);
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.F1))
             objData.Reload("Hypercube");
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        else if (Input.GetKeyDown(KeyCode.F2))
             objData.Reload("CliffordTorus");
 
 
