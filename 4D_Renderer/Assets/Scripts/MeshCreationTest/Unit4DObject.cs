@@ -98,7 +98,7 @@ public class Unit4DObject : MonoBehaviour
 
         for (int i = 0; i < c; i++)
         {
-            Vec5 viewvertex = MV * rawvertex[i];
+            Vec5 viewvertex = MV * rawvertex[i];    
             switch (Projtype)
             {
                 //Orthogonal
