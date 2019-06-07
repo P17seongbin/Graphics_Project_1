@@ -52,7 +52,13 @@ public class Rotate3D : MonoBehaviour
         Obj.ASpeed = new Vector3(x, y, z);
         Obj.transform.rotation = Quaternion.Euler(0, 0, 0);
     }
-
+    public void Halt()
+    {
+        x = 0;
+        y = 0;
+        z = 0;
+        Obj.ASpeed = new Vector3(0, 0, 0);
+    }
     private void Start()
     {
         speed = 0;
@@ -61,7 +67,7 @@ public class Rotate3D : MonoBehaviour
     public void SetSpeed(string s)
     {
 
-        if (float.TryParse(s, out float res)) speed = res;
+        if (float.TryParse(s, out float res)) speed = res * Mathf.Rad2Deg;
 
     }
 
