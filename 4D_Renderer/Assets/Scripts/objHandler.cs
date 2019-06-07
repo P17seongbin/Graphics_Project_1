@@ -83,8 +83,7 @@ public partial class ObjHandler
     }
     int vc = 0;
 
-
-
+    
     //생성할 때 입력한 Path로 Load를 시도합니다. 성공할 경우 True를 리턴합니다.
     public bool LoadData()
     {
@@ -98,7 +97,6 @@ public partial class ObjHandler
         //Line by Line Parser
         var splitFile = new string[] { "\r\n", "\r", "\n" };
         var spaceParcer = new char[] { ' ' };
-        //TODO: 예외처리를 해야 합니다
         TextAsset objrawText = (TextAsset)Resources.Load(Path);
         if (objrawText != null) //Load가 성공적으로 이루어 졌나요?
         {
@@ -107,7 +105,6 @@ public partial class ObjHandler
             int l = objData.Length;
             for (int i = 0; i < l; i++)
             {
-                //귀찮으니까 일단 If-else로 구현, 나중에 리팩토링 할 가능성이 크다.
                 if (objData[i].Length > 2)
                 {
                     if (objData[i].Substring(0, 2) == "vn")//vertex normal data

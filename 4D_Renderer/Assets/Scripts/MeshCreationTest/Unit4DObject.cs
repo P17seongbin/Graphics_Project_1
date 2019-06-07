@@ -99,8 +99,6 @@ public class Unit4DObject : MonoBehaviour
         for (int i = 0; i < c; i++)
         {
             Vec5 viewvertex = MV * rawvertex[i];
-
-            //귀찮으니까 Switch Case문으로 구현, 최적화가 필요하면 리팩토링
             switch (Projtype)
             {
                 //Orthogonal
